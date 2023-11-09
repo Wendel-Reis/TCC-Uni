@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .container {
+      width: 800px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .img-container {
+      width: 120px;
+      height: 120px;
+
+      max-width: 120px;
+      max-height: 120px;
+    }
+
+    span {
+      margin: 10px 0;
+      display: block;
+    }
+
+
+    #table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #table td,
+    #table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #table tr:hover {
+      background-color: #ddd;
+    }
+
+    #table th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="img-container" src="{{SYSTEM_LOGO}}" />
+    <br>
+
+    <span>Prezado, você está sendo notificado à aprovar a solicitação de pagamento <strong>{{ id }}</strong></span>
+    <span>Operação "{{ operacao }}"" no nível "{{ nivel_atual }}" de aprovação</span>
+
+    <br />
+
+    <span>Solicitado por: {{ solicitante }}</span>
+    <span>Com previssão de vencimento para: {{ data_vencimento }}</span>
+    <span>Com um custo de R$ {{ custo }}</span>
+    <br>
+    <strong>Atenciosamente!</strong>
+
+    <h3>Equipe | <strong>{{SYSTEM_NICKNAME}}</strong></h3>
+  </div>
+</body>
+
+</html>

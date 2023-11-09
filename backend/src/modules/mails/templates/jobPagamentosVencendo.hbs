@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .container {
+      width: 800px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .img-container {
+      width: 120px;
+      height: 120px;
+
+      max-width: 120px;
+      max-height: 120px;
+    }
+
+    span {
+      margin: 10px 0;
+      display: block;
+    }
+
+
+    #table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #table td,
+    #table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #table tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #table tr:hover {
+      background-color: #ddd;
+    }
+
+    #table th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <img class="img-container" src="{{SYSTEM_LOGO}}" />
+    <br>
+
+    <span>Prezados,</span>
+
+    <br />
+
+    <span>Segue anexo o relatório de pagamentos vencendo/vencidos</span>
+    <span>Em resumo, houveram: </span>
+
+    <table align="center" border="1" cellpadding="1" cellspacing="1" id="table" style="width:500px">
+      <tbody>
+        <tr>
+          <th scope="row">Vencendo em 7 dias</th>
+          <td>{{vencendoEm7Dias}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Vencendo em 3 dias</th>
+          <td>{{vencendoEm3Dias}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Vencendo em 1 dia</th>
+          <td>{{vencendoEm1Dias}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Vencidos</th>
+          <td>{{vencidos}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br>
+    <strong>Atenciosamente!</strong>
+
+    <h3>Equipe | <strong>{{SYSTEM_NICKNAME}}</strong></h3>
+  </div>
+</body>
+
+</html>

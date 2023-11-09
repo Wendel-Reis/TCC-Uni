@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>ADM. Financeira</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content appScrollTheme>
+
+  <ion-segment class="background-segment" [(ngModel)]="currentTab" [ngModelOptions]="{standalone: true}"
+    (ionChange)="changeTab($event)">
+    <ion-segment-button style="margin-left: 5px; max-width: 200px" layout="icon-start" value="pedidos">
+      <ion-icon style="font-size: 1.2em" name="bag-outline"></ion-icon>
+      <ion-label text-wrap class="wrap-text" style="font-size: 1.1em">
+        Pedidos
+      </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <br>
+
+  <div class="wall-background">
+    <ng-container *ngIf="currentTab === 'pedidos'">
+      <div style="max-width: 95%; margin: auto">
+        <app-pedido-main></app-pedido-main>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

@@ -1,0 +1,23 @@
+<div class="h-screen">
+    <div class="grid ">
+        <div *ngFor="let carga of cargaList" class="col-12 md:col-6 xl:col-4 p-3 ">
+            <div [ngClass]="{'border-3': shouldGlow(carga)}" class="surface-card shadow-2 border-rounded p-4 h-full border-primary border-round-3xl">
+                <div class="flex border-bottom-1 surface-border pb-4 ">
+                    <img [src]="carga.image" style="width: 70px;height: 70px; border-radius: 50px;" class="mr-3" />
+                    <div class="flex flex-column align-items-start">
+                        <span class="text-lg text-900 font-medium mb-1">{{ carga.nome_carga }}</span>
+                        <span class="text-500 font-medium mt-2">{{ carga.descricao_carga }}</span>
+                    </div>
+                </div>
+                <div class="flex justify-content-between pt-4">
+                    <button pButton pRipple label="Template" icon="pi pi-cloud-download"
+                        class="p-button-outlined p-button-primary w-6 mr-2" (click)="downloadTemplate(carga)"></button>
+                    <p-fileUpload #cargaFile mode="basic" name="carga" chooseLabel="Carregar"
+                        styleClass=" p-button-plain p-button-success" customUpload="true" [auto]="true"
+                        (uploadHandler)="uploadFile($event, carga, cargaFile)" chooseIcon="pi pi-cloud-upload">
+                    </p-fileUpload>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

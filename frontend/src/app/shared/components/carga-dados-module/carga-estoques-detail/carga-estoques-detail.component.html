@@ -1,0 +1,68 @@
+<ion-content appScrollTheme>
+  <div *ngIf="carga" class="surface-card p-4 shadow-2 border-round">
+    <div class="font-medium text-3xl text-900 mb-3">Detalhamento</div>
+    <div class="text-primary mb-5">{{ carga.status }}</div>
+    <ul class="list-none p-0 m-0 border-top-1 surface-border">
+      <li class="flex align-items-center py-3 px-2 flex-wrap ">
+        <div class="text-500 w-full md:w-2 font-medium">Carga</div>
+        <div class="text-900 w-full md:w-10">{{ carga.nome_carga }} - {{ carga.job_id }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 flex-wrap surface-ground">
+        <div class="text-500 w-full md:w-2 font-medium">Descrição</div>
+        <div class="text-900 w-full md:w-10 line-height-3">{{ carga.descricao_carga }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 flex-wrap ">
+        <div class="text-500 w-full md:w-2 font-medium">Job</div>
+        <div class="text-900 w-full md:w-10">{{ carga.nome_job }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 flex-wrap surface-ground">
+        <div class="text-500 w-full md:w-2 font-medium">Erro</div>
+        <div class="text-900 w-full md:w-10">{{ carga.error_descricao || 'Não houveram erros técnicos' }}</div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 flex-wrap ">
+        <div class="text-500 w-full md:w-2 font-medium">Tabelas afetadas</div>
+        <div class="text-900 w-full md:w-10">
+          <p-tag *ngFor="let t of tabelasAfetadas" styleClass="mr-2" [value]="t" [rounded]="true"></p-tag>
+        </div>
+      </li>
+      <li class="flex align-items-center py-3 px-2 flex-wrap surface-ground">
+        <div class="text-500 w-full md:w-2 font-medium">Detalhe da carga</div>
+        <div class="text-900 w-full md:w-10">
+          <div *ngIf="estoquesCarregado && estoquesCarregado.length >= 1" class="grid mt-0 mr-0">
+            <div *ngFor="let e of estoquesCarregado" class="col-12 md:col-6">
+              <div class="p-3 border-1 surface-border border-round surface-card">
+                <div class="text-900 mb-2">
+                  <ion-icon slot="start" icon="business-outline" class="mr-2"></ion-icon>
+                  <span class="font-medium">{{ e.loja?.nome || 'Loja não encontrada' }}</span>
+                </div>
+                <div class="text-900 mb-2">
+                  <i class="pi pi-tag mr-2"></i>
+                  <span class="font-medium">{{ e.produto?.nome || 'Produto não encontrado'}}</span>
+                </div>
+                <div class="surface-200 mb-1 mt-1 " style="height:2px"></div>
+                <ng-container *ngIf="!e.erro_descricao">
+                  <div class="text-700 mb-1">Quantidade em estoque: {{ e.quantidade_momento || 0 }}</div>
+                  <div class="text-700 mb-1">Quantidade alterada: {{ e.quantidade_alterada }}</div>
+                  <div class="text-700">Quantidade atualizada: {{ e.quantidade_atualizada }}</div>
+                </ng-container>
+                <ng-container *ngIf="e.erro_descricao">
+                  <div class="text-700 mb-1">Loja (inserida): {{ e.loja_carga }}</div>
+                  <div class="text-700 mb-1">Produto (inserido): {{ e.produto_carga }}</div>
+                  <div class="text-700">Erro: {{ e.erro_descricao }}</div>
+                </ng-container>
+                <div class="surface-200 mb-1 mt-1 " style="height:2px"></div>
+                <div class="text-primary">Status: {{ e.status }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="full" color="danger" (click)="fechar()">Fechar</ion-button>
+  </ion-toolbar>
+</ion-footer>

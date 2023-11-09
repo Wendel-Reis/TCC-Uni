@@ -1,0 +1,51 @@
+<div class="grid h-full w-full mx-1 my-1">
+  <p-table *ngIf="isLoaded" [value]="produtos.data" [lazy]="true" [paginator]="true" [rows]="produtos.meta.take"
+    [totalRecords]="produtos.meta.itemCount" [pageLinks]="produtos.meta.pageCount" (onLazyLoad)="paginar($event)"
+    dataKey="produto_id" [tableStyle]="{'min-width': '75rem'}" [selection]="selectedProdutos"
+    (selectionChange)="onSelectionChange($event)" [selectAll]="selectAll" (selectAllChange)="onSelectAllChange($event)"
+    [loading]="loading" [globalFilterFields]="['name']">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem"></th>
+        <th>Nome
+        </th>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+      </tr>
+      <tr>
+        <th style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>
+          <span class="p-input-icon-right mb-2 md:mb-0 ">
+            <i class="pi pi-search cursor-pointer text-primary" (click)="search()"></i>
+            <input type="search" pInputText [(ngModel)]="searchedNome" [ngModelOptions]="{standalone: true}"
+              placeholder="Buscar por nome" (keyup.enter)="search()">
+          </span>
+          <button pButton pRipple type="button" icon="pi pi-times-circle" class="ml-1 p-button-rounded p-button"
+            (click)="clear()"></button>
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-p>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="p"></p-tableCheckbox>
+        </td>
+        <td>{{p.nome}}</td>
+        <td>{{p.descricao}}</td>
+        <td>
+          <p-inputNumber [disabled]="disableInputNumber(p)" (onInput)="updateQuantidade($event, p)">
+          </p-inputNumber>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ion-footer>
+    <ion-toolbar>
+      <ion-button expand="full" (click)="next()" [disabled]="disableNext()">Concluir</ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</div>

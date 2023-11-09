@@ -1,0 +1,153 @@
+<ion-content appScrollTheme>
+  <div *ngIf="getLoad()" class="surface-ground px-4 py-4 md:px-6 lg:px-8">
+    <div class="grid -mr-3 -ml-3">
+      <div class="col-12 lg:col-8 p-4">
+
+        <form [formGroup]="form" (ngSubmit)="$event.preventDefault()">
+          <div class="surface-card grid formgrid p-fluid border-round shadow-2 p-4">
+            <div class="col-12 mb-4 flex flex-column lg:flex-row align-items-center justify-content-between">
+              <div class="text-900 font-medium text-xl">Fechamento de venda</div>
+            </div>
+
+            <p-divider class="w-full px-2 mb-3"></p-divider>
+
+            <div class="col-12 md:col-6 field mb-3">
+              <label for="vendedor" class="text-900 font-medium mb-1 font-bold">Vendedor</label>
+              <div id="vendedor" class="flex justify-content-between p-3 border-round border-1 border-primary surface-50
+              surface-border w-full mr-3 hover:border-primary cursor-pointer">
+                <div class="mr-3 lg:mr-0 ">
+                  <div class="text-900 font-bold mb-2">{{ funcionario.nome }}</div>
+                  <span class="text-600 text-start">{{ funcionario.cpf | cpfMask }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 md:col-6 field mb-3">
+              <label for="loja" class="text-900 font-medium mb-1 font-bold">Loja</label>
+              <div id="loja" class="flex justify-content-between p-3 border-round border-1 border-primary surface-50
+              surface-border w-full mr-3 hover:border-primary cursor-pointer">
+                <div class="mr-3 lg:mr-0 ">
+                  <div class="text-900 font-bold mb-2">{{ loja.nome }}</div>
+                  <span class="text-600">{{ loja.descricao | limitCharsPipe:20 }}</span>
+                </div>
+              </div>
+            </div>
+            <p-divider class="w-full px-2 mb-3"></p-divider>
+
+            <ng-container>
+              <div class="col-12 md:col-6 field mb-3">
+                <label for="desconto_acrescimo" class="text-900 font-medium mb-1 font-bold">Acréscimo/Desconto?</label>
+                <p-dropdown id="desconto_acrescimo" [options]="opcoesAcrescimoDesconto"
+                  [(ngModel)]="selectedOpcaoAcrescimoDesconto" [ngModelOptions]="{standalone: true}"
+                  placeholder="Selecione" (onChange)="listenOpcaoAcrescimoDesconto()">
+                </p-dropdown>
+              </div>
+              <div *ngIf="disableOpcoesTipo()" class="col-12 md:col-6 field mb-3">
+                <label for="tipo_desconto_acrescimo" class="text-900 font-medium mb-1 font-bold">Tipo de
+                  Acréscimo/Desconto</label>
+                <p-dropdown id="tipo_desconto_acrescimo" [options]="opcoesTipo" [(ngModel)]="selectedOpcaoTipo"
+                  [ngModelOptions]="{standalone: true}" placeholder="Selecione" (onChange)="listenOpcoesTipoChange()">
+                </p-dropdown>
+              </div>
+
+              <div *ngIf="selectedOpcaoTipo == 'FIXO'" class="field mb-4 col-12">
+                <label for="acrescimo_desconto" class="font-medium text-900">Valor (FIXO)</label>
+                <p-inputNumber id="acrescimo_desconto" formControlName="acrescimo_desconto" mode="decimal"
+                  [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+              </div>
+              <div *ngIf="selectedOpcaoTipo == 'PERCENTUAL'" class="field mb-4 col-12">
+                <label for="acrescimo_desconto" class="font-medium text-900">Valor (PERCENTUAL)</label>
+                <p-inputNumber id="acrescimo_desconto" formControlName="acrescimo_desconto" max="100"></p-inputNumber>
+              </div>
+              <div *ngIf="selectedOpcaoTipo" class="field mb-4 col-12">
+                <label for="descricao" class="font-medium text-900">Justificativa</label>
+                <input id="descricao" type="text" pInputText formControlName="descricao">
+              </div>
+            </ng-container>
+
+            <p-divider class="w-full px-2 mb-3"></p-divider>
+
+            <div class="text-900 font-medium text-xl mt-4 lg:mt-0 mb-4 px-2">Forma de pagamento</div>
+            <div class="col-12 mb-4">
+              <div *ngFor="let f of formasPagamento" class="p-3 border-1 border-round-top surface-border cursor-pointer"
+                (click)="selectFormaPagamentoDiv(f)"
+                [ngClass]="{'border-primary surface-50': selectedFormaPagamento === f.value}">
+                <p-radioButton [value]="f.value" [inputId]="f.value" formControlName="pagamento_forma"
+                  (onClick)="selectFormaPagamento()"></p-radioButton>
+                <label class="text-900 ml-3">{{ f.label }}</label>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <div *ngIf="cart" class="col-12 lg:col-4 p-4">
+        <div class="surface-card border-round shadow-2 p-5">
+          <div class="flex justify-content-between align-items-center border-bottom-1 pb-3 surface-border">
+            <span class="text-900 font-medium text-lg lg:text-xl"><i class="pi pi-shopping-cart text-xl mr-2"></i>
+              Seu pedido ({{ getTotalItens() }})</span>
+          </div>
+          <div *ngFor="let item of cart.pedido?.item_produto"
+            class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-3 my-3 border-bottom-1 surface-border">
+            <img [src]="item.imagem_principal_url || 'assets/imgs/outros/default-produto.png'"
+              class="w-8rem h-8rem flex-shrink-0 mb-3" />
+            <div class="flex-auto lg:ml-3">
+              <div class="flex align-items-center justify-content-between mb-3">
+                <span class="text-900 font-medium">{{ item.nome }}</span>
+                <span class="text-900 font-bold">R$ {{ item.sub_total | currency:'BRL': '' }}</span>
+              </div>
+              <div class="flex flex-auto justify-content-between align-items-center">
+                <p-inputNumber [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" min="0"
+                  inputStyleClass="w-2rem text-center py-2 px-1 border-transparent" [max]="item.quantidade_max"
+                  class="border-1 surface-border border-round" [(ngModel)]="item.quantidade"
+                  decrementButtonClass="p-button-text text-600 hover:text-primary py-1 px-1"
+                  incrementButtonClass="p-button-text text-600 hover:text-primary py-1 px-1"
+                  incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" (onBlur)="changeQuantidade(item)"
+                  (onInput)="changeQuantidade(item)">
+                </p-inputNumber>
+                <button pButton pRipple icon="pi pi-trash" (click)="removProduto(item.produto_id)"
+                  class="text-600 p-button-text p-button-rounded"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="py-2 mt-3 border-bottom-1 surface-border">
+            <div class="flex justify-content-between align-items-center mb-3">
+              <span class="text-900">Subtotal</span>
+              <span class="text-900">R$ {{ getSubTotal() | currency:'BRL': '' }}</span>
+            </div>
+            <div class="flex justify-content-between align-items-center mb-3">
+              <span class="text-900">Desconto/Acréscimo</span>
+              <span class="text-900">R${{ getDescontoAcrescimoTxt() }}</span>
+            </div>
+            <div class="flex justify-content-between align-items-center mb-3">
+              <span class="text-900">Total</span>
+              <span class="text-900 font-bold">R$ {{ getTotal() | currency:'BRL': '' }}</span>
+            </div>
+          </div>
+
+          <button pButton class="p-button-primary w-full mt-3" label="Finalizar venda" (click)="finalizarPedido()"
+            [disabled]="disabledCreatePedido()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!getLoad()" class="surface-ground px-4 py-4 md:px-6 lg:px-8 h-full">
+    <div
+      style="background: radial-gradient(50% 109137.91% at 50% 50%, rgba(233, 203, 30, 0.1) 0%, rgba(254, 253, 244, 0) 100%);"
+      class="text-center">
+      <span class="bg-surface-50 text-yellow-500 font-bold text-2xl inline-block px-3">Atenção</span>
+    </div>
+    <div class="mt-6 mb-5 font-bold text-6xl text-900 text-center">Carrinho vazio</div>
+    <p class="text-700 text-3xl mt-0 mb-6 text-center">Adicione itens ao carrinho para prosseguir.</p>
+
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="full" color="danger" (click)="fechar()">Fechar</ion-button>
+  </ion-toolbar>
+</ion-footer>

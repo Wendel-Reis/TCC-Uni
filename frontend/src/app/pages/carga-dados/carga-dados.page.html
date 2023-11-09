@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cargas de Dados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content appScrollTheme>
+  <br />
+  <ion-segment class="background-segment" [(ngModel)]="currentTab" [ngModelOptions]="{standalone: true}"
+    (ionChange)="changeTab($event)">
+    <ion-segment-button style="margin-left: 5px; max-width: 200px" layout="icon-start" value="historico">
+      <ion-icon class="pi pi-history" style="font-size: 1.2em"></ion-icon>
+      <ion-label text-wrap class="wrap-text" style="font-size: 1.1em">
+        Histórico
+      </ion-label>
+    </ion-segment-button>
+    <ion-segment-button style="max-width: 200px" layout="icon-start" value="carregar">
+      <ion-icon style="font-size: 1.2em" name="cloud-upload-outline"></ion-icon>
+      <ion-label style="font-size: 1.1em"> Carregar </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+
+  <div class="wall-background py-5">
+    <ng-container *ngIf="currentTab === 'historico'">
+      <div style="max-width: 95%; margin: auto">
+        <app-carga-produtos-main></app-carga-produtos-main>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="currentTab === 'carregar'">
+      <div style="max-width: 95%; margin: auto">
+        <app-carga-produtos-upload [glow-option]="selectedOption"></app-carga-produtos-upload>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

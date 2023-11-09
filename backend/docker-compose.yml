@@ -1,0 +1,49 @@
+version:  "3.7"
+
+services: 
+
+  redis_tcc:
+    container_name: redis_tcc
+    image: docker.io/bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=BCKBA*&Vb23
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+
+  database_tcc:
+    image: postgres
+    container_name: database_tcc
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=ignite
+      - POSTGRES_DB=barbearia
+      - TZ=America/Sao_Paulo
+      - PGTZ=America/Sao_Paulo
+    volumes:
+      - pgdata:/data/postgres
+  app_tcc:
+    build: .
+    container_name: api_tcc
+    ports:
+      - 3000:3000
+    volumes: 
+        - .:/usr/app
+    links:
+    - database_tcc
+    - redis_tcc
+    depends_on: 
+    - database_tcc
+    - redis_tcc
+
+
+volumes:
+    pgdata:
+      driver: local
+    redis_data:
+      driver: local  
